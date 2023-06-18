@@ -110,10 +110,11 @@ function displayMovements(movements) {
   containerMovements.innerHTML = "";
   movements.forEach(function (value, i) {
     const type = value > 0 ? "deposit" : "withdrawal";
+    const typeMessage = value > 0 ? "внесение" : "снятие";
     const html = `
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">
-      ${i + 1}
+      ${i + 1} ${typeMessage}
     </div>
     <div class="movements__date">3 дня назад</div>
     <div class="movements__value">${value}₽</div>
@@ -121,8 +122,6 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
-
-displayMovements(account1.movements);
 
 //создание логина из ФИО в объекте
 function createLogin(accs) {
@@ -156,8 +155,6 @@ function balaceMassiv(movements) {
   labelBalance.textContent = `${balace}₽`;
 }
 
-balaceMassiv(account2.movements); //11720
-
 //узнать максимальное число в массиве
 const max = account3.movements.reduce(function (acc, value) {
   if (acc > value) {
@@ -184,4 +181,39 @@ function balaceMonye(movements) {
   labelSumInterest.textContent = `${sumAdd + sumDel}₽`;
 }
 
-balaceMonye(account1.movements);
+/////////////////////////////////////////////
+
+//ищет определенного пользователя  и выдает его данные
+const acc = accounts.find(function (acc) {
+  return acc.owner === "Polina Filimonova";
+});
+
+console.log(acc); //{owner: 'Polina Filimonova', movements: Array(9), pin: 3333, interesRate: 0.5, logIn: 'pf'}
+
+///////////////////////////////////////////////////
+
+let currentAccount;
+function Login() {
+  btnLogin.addEventListener("click", function (e) {
+    e.preventDefault();
+    console.log("Login");
+    //проверка первых букв в имени и фамилии для авторизации, есть ли такой пользователь
+    currentAccount = accounts.find(function (acc) {
+      return acc.logIn === inputLoginUsername.value;
+    });
+    console.log(currentAccount); //{owner: 'Dmitrii Fokeev', movements: Array(8), pin: 1111, interesRate: 1.5, logIn: 'df'}
+    if (currentAccount && currentAccount.pin === Number(inputLoginPin.value)) {
+      containerApp.style.opacity = 100;
+      inputLoginPin.value = inputLoginUsername.value = "";
+      console.log("true");
+
+      displayMovements(currentAccount.movements);
+
+      balaceMassiv(currentAccount.movements); //11720
+
+      balaceMonye(currentAccount.movements);
+    }
+  });
+}
+
+Login();
