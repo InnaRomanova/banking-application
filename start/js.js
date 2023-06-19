@@ -148,11 +148,11 @@ console.log(accounts); //(4) [{…}, {…}, {…}, {…}]
 //метод reduce();
 
 //общий баланс
-function balaceMassiv(movements) {
-  const balace = movements.reduce(function (acc, val, key, movements) {
+function balaceMassiv(acc) {
+  acc.balace = acc.movements.reduce(function (acc, val, key, movements) {
     return acc + val;
   });
-  labelBalance.textContent = `${balace}₽`;
+  labelBalance.textContent = `${acc.balace}₽`;
 }
 
 //узнать максимальное число в массиве
@@ -189,7 +189,13 @@ const acc = accounts.find(function (acc) {
 });
 
 console.log(acc); //{owner: 'Polina Filimonova', movements: Array(9), pin: 3333, interesRate: 0.5, logIn: 'pf'}
-
+//////////////////////////////////////////////////
+//вызовы функций
+function upDateUi(acc) {
+  displayMovements(acc.movements);
+  balaceMassiv(acc); //11720
+  balaceMonye(acc.movements);
+}
 ///////////////////////////////////////////////////
 
 let currentAccount;
@@ -206,14 +212,38 @@ function Login() {
       containerApp.style.opacity = 100;
       inputLoginPin.value = inputLoginUsername.value = "";
       console.log("true");
-
-      displayMovements(currentAccount.movements);
-
-      balaceMassiv(currentAccount.movements); //11720
-
-      balaceMonye(currentAccount.movements);
+      upDateUi(currentAccount);
     }
   });
 }
 
 Login();
+
+/////////////////////////////////////////////////////////////
+
+function transfer() {
+  btnTransfer.addEventListener("click", function (e) {
+    e.preventDefault();
+    const translationTo = accounts.find(function (acc) {
+      return acc.logIn === inputTransferTo.value;
+    });
+    const translationSum = Number(inputTransferAmount.value);
+    console.log(translationTo, translationSum);
+    if (
+      //условие, чтобы перевести деньги
+      translationTo &&
+      translationSum > 0 &&
+      currentAccount.balace >= translationSum &&
+      translationTo.logIn !== currentAccount.logIn
+    ) {
+      console.log("Успешно");
+      currentAccount.movements.push(-translationSum);
+      translationTo.movements.push(translationSum);
+      upDateUi(currentAccount);
+      inputTransferTo.value = inputTransferAmount.value = "";
+      console.log("true");
+    }
+  });
+}
+
+transfer();
