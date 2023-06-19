@@ -209,9 +209,39 @@ function Login() {
 
       displayMovements(currentAccount.movements);
 
+<<<<<<< Updated upstream
       balaceMassiv(currentAccount.movements); //11720
 
       balaceMonye(currentAccount.movements);
+=======
+/////////////////////////////////////////////////////////////
+//функция для перевода денег
+function transfer() {
+  btnTransfer.addEventListener("click", function (e) {
+    e.preventDefault();
+    const translationTo = accounts.find(function (acc) {
+      return acc.logIn === inputTransferTo.value;
+    });
+    //поле ввода суммы, сразу переводим строку в числовой тип number
+    const translationSum = Number(inputTransferAmount.value);
+    console.log(translationTo, translationSum);
+    if (
+      //условие, чтобы перевести деньги
+      translationTo &&
+      translationSum > 0 &&
+      currentAccount.balace >= translationSum &&
+      translationTo.logIn !== currentAccount.logIn
+    ) {
+      console.log("Успешно");
+      //списывание
+      currentAccount.movements.push(-translationSum);
+      //зачисление в тотт аккаунт, который указали
+      translationTo.movements.push(translationSum);
+      upDateUi(currentAccount);
+      //очищение полей инпутов после перевода
+      inputTransferTo.value = inputTransferAmount.value = "";
+      console.log("true");
+>>>>>>> Stashed changes
     }
   });
 }
