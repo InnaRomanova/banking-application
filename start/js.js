@@ -247,3 +247,50 @@ function transfer() {
 }
 
 transfer();
+
+//метод findIndex()
+const index = accounts.findIndex(function (acc) {
+  return acc.logIn === "af";
+})
+console.log(accounts.indexOf(account2));
+console.log(index);
+
+////////////////////////////////////////
+//закрытие аккаунта
+function logOut() {
+  btnClose.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (inputCloseUsername.value === currentAccount.logIn && 
+      Number(inputClosePin.value) === currentAccount.pin) {
+      const index = accounts.findIndex(function (acc) {
+        return acc.logIn === currentAccount.logIn;
+      })
+      console.log(index);
+      //удаление 1 аккаунта
+      accounts.splice(index, 1);
+      //страница закрывается, стиль меняется
+      containerApp.style.opacity = 0;
+      console.log(accounts);
+    }
+    inputCloseUsername.value = inputClosePin.value = "";
+  })
+}
+
+logOut();
+
+//////////////////////////////
+//метод some() и every() - внесение денег в аккаунте
+
+function intro() {
+  btnLoan.addEventListener("click", function(e) {
+    e.preventDefault();
+    const amount = Number(inputLoanAmount.value);
+    if(amount > 0) {
+      currentAccount.movements.push(amount);
+      upDateUi(currentAccount)
+    }
+    inputLoanAmount.value = "";
+  })
+}
+
+intro();
