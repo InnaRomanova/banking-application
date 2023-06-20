@@ -251,7 +251,7 @@ transfer();
 //метод findIndex()
 const index = accounts.findIndex(function (acc) {
   return acc.logIn === "af";
-})
+});
 console.log(accounts.indexOf(account2));
 console.log(index);
 
@@ -260,11 +260,13 @@ console.log(index);
 function logOut() {
   btnClose.addEventListener("click", function (e) {
     e.preventDefault();
-    if (inputCloseUsername.value === currentAccount.logIn && 
-      Number(inputClosePin.value) === currentAccount.pin) {
+    if (
+      inputCloseUsername.value === currentAccount.logIn &&
+      Number(inputClosePin.value) === currentAccount.pin
+    ) {
       const index = accounts.findIndex(function (acc) {
         return acc.logIn === currentAccount.logIn;
-      })
+      });
       console.log(index);
       //удаление 1 аккаунта
       accounts.splice(index, 1);
@@ -273,7 +275,7 @@ function logOut() {
       console.log(accounts);
     }
     inputCloseUsername.value = inputClosePin.value = "";
-  })
+  });
 }
 
 logOut();
@@ -282,15 +284,44 @@ logOut();
 //метод some() и every() - внесение денег в аккаунте
 
 function intro() {
-  btnLoan.addEventListener("click", function(e) {
+  btnLoan.addEventListener("click", function (e) {
     e.preventDefault();
     const amount = Number(inputLoanAmount.value);
-    if(amount > 0) {
+    if (amount > 0) {
       currentAccount.movements.push(amount);
-      upDateUi(currentAccount)
+      upDateUi(currentAccount);
     }
     inputLoanAmount.value = "";
-  })
+  });
 }
 
 intro();
+
+//////////////////////////////////////////
+//метод flat() - пример
+
+const flatMas = [1, [5, 3], 4, 6, 8, 1, [556, [54, 65], 10]];
+
+console.log(flatMas.flat(2));
+
+///////////////////////////////////
+
+//общий баланс всех пользователей - длинная запись
+// const accMov = accounts.map(function (acc) {
+//   return acc.movements;
+// });
+// console.log(accMov);
+
+// const allMov = accMov.flat();
+// console.log(allMov);
+
+// const allBalance = allMov.reduce(function (acc, mov) {
+//   return acc + mov;
+// }, 0);
+// console.log(allBalance);
+
+const accMov = accounts
+  .map((acc) => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(accMov);
