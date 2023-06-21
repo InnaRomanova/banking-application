@@ -340,7 +340,20 @@ function filter() {
     e.preventDefault();
     displayMovements(currentAccount.movements, !sorted);
     sorted = !sorted;
-  }
-  )
+  });
 }
 filter();
+
+//метод fill() и Array.from()
+function balanceClick() {
+  labelBalance.addEventListener("click", function () {
+    console.log(document.querySelectorAll(".movements__value")); //NodeList(8) [div.movements__value, div.movements__value, div.movements__value, div.movements__value, div.movements__value, div.movements__value, div.movements__value, div.movements__value]
+    Array.from(
+      document.querySelectorAll(".movements__value"),
+      function (value, i) {
+        return (value.textContent = value.textContent.replace("₽", "RUB"));
+      }
+    );
+  });
+}
+balanceClick();
