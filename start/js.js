@@ -106,9 +106,12 @@ const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
 // Вывод на страницу всех приходов и уходов
-function displayMovements(movements) {
+function displayMovements(movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (value, i) {
+
+  const moves = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  moves.forEach(function (value, i) {
     const type = value > 0 ? "deposit" : "withdrawal";
     const typeMessage = value > 0 ? "внесение" : "снятие";
     const html = `
@@ -307,6 +310,7 @@ console.log(flatMas.flat(2));
 ///////////////////////////////////
 
 //общий баланс всех пользователей - длинная запись
+
 // const accMov = accounts.map(function (acc) {
 //   return acc.movements;
 // });
@@ -320,8 +324,23 @@ console.log(flatMas.flat(2));
 // }, 0);
 // console.log(allBalance);
 
+//короткая запись
 const accMov = accounts
   .map((acc) => acc.movements)
   .flat()
   .reduce((acc, mov) => acc + mov, 0);
 console.log(accMov);
+
+/////////////////////////////////////
+
+//сортировка-фильтр
+let sorted = false;
+function filter() {
+  btnSort.addEventListener("click", function (e) {
+    e.preventDefault();
+    displayMovements(currentAccount.movements, !sorted);
+    sorted = !sorted;
+  }
+  )
+}
+filter();
