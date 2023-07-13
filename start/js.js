@@ -16,8 +16,8 @@ const account1 = {
     "2023-07-11T23:36:17.929Z",
     "2023-07-12T10:51:36.790Z",
   ],
-  // currency: "RUB",
-  // locale: "pt-PT",
+  currency: "RUB",
+  locale: "pt-PT",
 };
 
 const account2 = {
@@ -36,8 +36,8 @@ const account2 = {
     "2020-06-25T18:49:59.371Z",
     "2020-07-26T12:01:20.894Z",
   ],
-  // currency: "USD",
-  // locale: "en-US",
+  currency: "USD",
+  locale: "en-US",
 };
 
 const account3 = {
@@ -56,8 +56,8 @@ const account3 = {
     "2020-06-25T18:49:59.371Z",
     "2020-07-26T12:01:20.894Z",
   ],
-  // currency: "EUR",
-  // locale: "es-PE",
+  currency: "EUR",
+  locale: "es-PE",
 };
 
 const account4 = {
@@ -73,8 +73,8 @@ const account4 = {
     "2020-01-25T14:18:46.235Z",
     "2020-02-05T16:33:06.386Z",
   ],
-  // currency: "USD",
-  // locale: "ru-RU",
+  currency: "USD",
+  locale: "ru-RU",
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -207,6 +207,7 @@ function balaceMonye(movements) {
 
   const sumDel = movements.filter((x) => x <= 0).reduce((acc, x) => acc + x, 0);
   console.log(sumDel); //-1180
+
   labelSumOut.textContent = `${Math.abs(sumDel)}₽`;
 
   labelSumInterest.textContent = `${sumAdd + sumDel}₽`;
@@ -230,14 +231,28 @@ function upDateUi(acc) {
 ///////////////////////////////////////////////////
 //устанавливаю дату в личном кабинете
 function dateNew() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = `${now.getMonth() + 1}`.padStart(2, 0);
-  const date = `${now.getDate()}`.padStart(2, 0);
-  const hours = `${now.getHours()}`.padStart(2, 0);
-  const minutes = `${now.getMinutes()}`.padStart(2, 0);
-  labelDate.textContent = `${date}/${month}/${year} ${hours}:${minutes}`;
-  console.log(now);
+  const local = navigator.language;
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    weekday: "long",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZoneName: "long",
+    hour12: true,
+  };
+  // const now = new Date();
+  // const year = now.getFullYear();
+  // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+  // const date = `${now.getDate()}`.padStart(2, 0);
+  // const hours = `${now.getHours()}`.padStart(2, 0);
+  // const minutes = `${now.getMinutes()}`.padStart(2, 0);
+  // labelDate.textContent = `${date}/${month}/${year} ${hours}:${minutes}`;
+  labelDate.textContent = Intl.DateTimeFormat(local, options).format(
+    new Date()
+  );
 }
 
 let currentAccount;
