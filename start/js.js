@@ -221,14 +221,37 @@ const acc = accounts.find(function (acc) {
 });
 
 console.log(acc); //{owner: 'Polina Filimonova', movements: Array(9), pin: 3333, interesRate: 0.5, logIn: 'pf'}
+
 //////////////////////////////////////////////////
-//вызовы функций
+
+//вызовы функций - обновление интерфейса сайта
 function upDateUi(acc) {
   displayMovements(acc);
   balaceMassiv(acc); //11720
   balaceMonye(acc.movements);
 }
+
 ///////////////////////////////////////////////////
+
+function startLogOut() {
+  let time = 600;
+
+  function tick() {
+    const minute = String(Math.trunc(time / 60)).padStart(2, 0);
+    const second = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${minute}:${second}`;
+
+    if (time == 0) {
+      clearInterval(timer);
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  }
+
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+}
 //устанавливаю дату в личном кабинете
 function dateNew() {
   const local = navigator.language;
@@ -253,9 +276,15 @@ function dateNew() {
   labelDate.textContent = Intl.DateTimeFormat(local, options).format(
     new Date()
   );
+  if (timer) {
+    clearInterval(timer);
+  }
+  timer = startLogOut();
 }
 
 let currentAccount;
+let timer;
+
 function Login() {
   btnLogin.addEventListener("click", function (e) {
     e.preventDefault();
@@ -299,6 +328,9 @@ function transfer() {
       currentAccount.movements.push(-translationSum);
       translationTo.movements.push(translationSum);
       currentAccount.movementsDates.push(new Date().toISOString());
+      //обновление таймера при  переводе денег
+      clearInterval(timer);
+      timer = startLogOut();
       upDateUi(currentAccount);
       inputTransferTo.value = inputTransferAmount.value = "";
       console.log("true");
@@ -350,6 +382,9 @@ function intro() {
     if (amount > 0) {
       currentAccount.movements.push(amount);
       currentAccount.movementsDates.push(new Date().toISOString());
+      //обновление таймера при внесении денег
+      clearInterval(timer);
+      timer = startLogOut();
       upDateUi(currentAccount);
     }
     inputLoanAmount.value = "";
